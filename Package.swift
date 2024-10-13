@@ -56,11 +56,8 @@ let includePrivacyManifest = false
 #endif
 
 let package = Package(
-    name: "swift-nio-ssl",
+    name: "swift-boring-ssl",
     products: [
-        .library(name: "NIOSSL", targets: ["NIOSSL"]),
-        .executable(name: "NIOTLSServer", targets: ["NIOTLSServer"]),
-        .executable(name: "NIOSSLHTTP1Client", targets: ["NIOSSLHTTP1Client"]),
         .library(name: "CNIOBoringSSL", type: .static, targets: ["CNIOBoringSSL"]),
     ],
     dependencies: generateDependencies(),
