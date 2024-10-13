@@ -58,77 +58,16 @@ let includePrivacyManifest = false
 let package = Package(
     name: "swift-boring-ssl",
     products: [
-        .library(name: "CNIOBoringSSL", type: .static, targets: ["CNIOBoringSSL"]),
+        .library(name: "CBoringSSL", type: .static, targets: ["CBoringSSL"]),
     ],
     dependencies: generateDependencies(),
     targets: [
         .target(
-            name: "CNIOBoringSSL",
+            name: "CBoringSSL",
             cSettings: [
               .define("_GNU_SOURCE"),
               .define("_POSIX_C_SOURCE", to: "200112L"),
               .define("_DARWIN_C_SOURCE")
-            ]),
-        .target(
-            name: "CNIOBoringSSLShims",
-            dependencies: [
-                "CNIOBoringSSL"
-            ],
-            cSettings: [
-              .define("_GNU_SOURCE"),
-            ]),
-        .target(
-            name: "NIOSSL",
-            dependencies: [
-                "CNIOBoringSSL",
-                "CNIOBoringSSLShims",
-                .product(name: "NIO", package: "swift-nio"),
-                .product(name: "NIOCore", package: "swift-nio"),
-                .product(name: "NIOConcurrencyHelpers", package: "swift-nio"),
-                .product(name: "NIOTLS", package: "swift-nio"),
-            ],
-            exclude: includePrivacyManifest ? [] : ["PrivacyInfo.xcprivacy"],
-            resources: includePrivacyManifest ? [.copy("PrivacyInfo.xcprivacy")] : []
-        ),
-        .executableTarget(
-            name: "NIOTLSServer",
-            dependencies: [
-                "NIOSSL",
-                .product(name: "NIOCore", package: "swift-nio"),
-                .product(name: "NIOPosix", package: "swift-nio"),
-                .product(name: "NIOConcurrencyHelpers", package: "swift-nio"),
-            ],
-            exclude: [
-                "README.md"
-            ]),
-        .executableTarget(
-            name: "NIOSSLHTTP1Client",
-            dependencies: [
-                "NIOSSL",
-                .product(name: "NIOCore", package: "swift-nio"),
-                .product(name: "NIOPosix", package: "swift-nio"),
-                .product(name: "NIOHTTP1", package: "swift-nio"),
-                .product(name: "NIOFoundationCompat", package: "swift-nio"),
-            ],
-            exclude: [
-                "README.md"
-            ]),
-        .executableTarget(
-            name: "NIOSSLPerformanceTester",
-            dependencies: [
-                "NIOSSL",
-                .product(name: "NIOCore", package: "swift-nio"),
-                .product(name: "NIOEmbedded", package: "swift-nio"),
-                .product(name: "NIOTLS", package: "swift-nio"),
-            ]),
-        .testTarget(
-            name: "NIOSSLTests",
-            dependencies: [
-                "NIOSSL",
-                .product(name: "NIOCore", package: "swift-nio"),
-                .product(name: "NIOEmbedded", package: "swift-nio"),
-                .product(name: "NIOPosix", package: "swift-nio"),
-                .product(name: "NIOTLS", package: "swift-nio"),
             ]),
     ],
     cxxLanguageStandard: .cxx14
